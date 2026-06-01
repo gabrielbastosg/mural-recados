@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mural de Recados</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>📌 Mural de Recados</h1>
+    <p class="sub">Deixe um recado para quem visitar este site.</p>
+
+    <!-- Formulário para enviar um recado (vai chamar a API na Fase 2) -->
+    <form id="form-recado">
+      <input id="nome" type="text" placeholder="Seu nome" maxlength="40" required />
+      <textarea id="mensagem" placeholder="Sua mensagem" maxlength="200" required></textarea>
+      <button type="submit">Enviar recado</button>
+    </form>
+
+    <!-- Lista de recados (vai ser preenchida pela API na Fase 2) -->
+    <section id="lista-recados">
+      <p class="vazio">Os recados aparecerão aqui quando a API estiver pronta (Fase 2).</p>
+    </section>
+  </main>
+
+  <footer>
+    <small>Site estático no GitHub Pages • APIs na AWS • projeto de estudo</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
