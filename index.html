@@ -4,28 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mural de Recados</title>
+
+  <!-- Fonte do Google (Inter): deixa o texto mais bonito e profissional -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="container">
-    <h1>📌 Mural de Recados</h1>
-    <p class="sub">Deixe um recado para quem visitar este site.</p>
+    <!-- Cabeçalho do site -->
+    <header class="cabecalho">
+      <h1>📌 Mural de Recados</h1>
+      <p class="sub">Deixe um recado para quem visitar este site.</p>
+    </header>
 
-    <!-- Formulário para enviar um recado (vai chamar a API na Fase 2) -->
-    <form id="form-recado">
-      <input id="nome" type="text" placeholder="Seu nome" maxlength="40" required />
-      <textarea id="mensagem" placeholder="Sua mensagem" maxlength="200" required></textarea>
+    <!-- Formulário para enviar um recado -->
+    <form id="form-recado" class="cartao">
+      <label for="nome">Seu nome</label>
+      <input id="nome" type="text" placeholder="Ex.: Gabriel" maxlength="40" required />
+
+      <label for="mensagem">Sua mensagem</label>
+      <textarea id="mensagem" placeholder="Escreva algo legal..." maxlength="200" required></textarea>
+
       <button type="submit">Enviar recado</button>
     </form>
 
-    <!-- Lista de recados (vai ser preenchida pela API na Fase 2) -->
-    <section id="lista-recados">
-      <p class="vazio">Os recados aparecerão aqui quando a API estiver pronta (Fase 2).</p>
+    <!-- Lista de recados (preenchida pelo JavaScript ao chamar a API) -->
+    <section>
+      <h2 class="titulo-secao">Recados</h2>
+      <div id="lista-recados">
+        <p class="vazio">Carregando recados...</p>
+      </div>
     </section>
   </main>
 
   <footer>
-    <small>Site estático no GitHub Pages • APIs na AWS • projeto de estudo</small>
+    <small>Site estático no GitHub Pages • APIs na AWS • feito por Gabriel</small>
   </footer>
 
   <script src="script.js"></script>

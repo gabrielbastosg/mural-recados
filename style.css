@@ -1,82 +1,154 @@
+/* ============================================================
+   VARIÁVEIS DE COR
+   Definir cores aqui em cima permite trocar o tema todo num lugar só.
+   ============================================================ */
 :root {
-  --bg: #0f172a;
+  --bg-1: #0b1220;
+  --bg-2: #131c31;
   --card: #1e293b;
+  --card-borda: #2b3a52;
   --accent: #38bdf8;
+  --accent-2: #818cf8;
   --text: #e2e8f0;
   --muted: #94a3b8;
 }
 
-* { box-sizing: border-box; }
+/* box-sizing: faz padding/borda NÃO aumentarem o tamanho total do elemento.
+   Evita "estouro" de layout. É padrão usar isso em todo projeto. */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  margin: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background: var(--bg);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: var(--text);
+  /* Fundo com um leve degradê (radial) para dar profundidade */
+  background:
+    radial-gradient(1200px 600px at 50% -10%, var(--bg-2), var(--bg-1));
+  line-height: 1.5;
 }
 
+/* Container central: limita a largura e centraliza o conteúdo */
 .container {
-  flex: 1;
+  flex: 1;                 /* ocupa o espaço para empurrar o footer pra baixo */
   width: 100%;
-  max-width: 640px;
+  max-width: 600px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 2.5rem 1rem;
 }
 
-h1 { margin-bottom: 0.25rem; }
-.sub { color: var(--muted); margin-top: 0; }
+/* ---------- Cabeçalho ---------- */
+.cabecalho { text-align: center; margin-bottom: 2rem; }
 
-form {
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  /* Texto com degradê: pinta o texto com o gradiente e "recorta" no formato das letras */
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sub { color: var(--muted); margin-top: 0.4rem; }
+
+/* ---------- Cartão (usado no formulário) ---------- */
+.cartao {
+  background: var(--card);
+  border: 1px solid var(--card-borda);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  background: var(--card);
-  padding: 1.25rem;
-  border-radius: 12px;
-  margin: 1.5rem 0;
+  gap: 0.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);  /* sombra suave dá "elevação" */
+}
+
+label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 0.5rem;
 }
 
 input, textarea {
-  padding: 0.7rem;
-  border: 1px solid #334155;
-  border-radius: 8px;
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--card-borda);
+  border-radius: 10px;
   background: #0b1220;
   color: var(--text);
-  font-size: 1rem;
+  font: inherit;            /* herda a fonte Inter do body */
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-textarea { min-height: 80px; resize: vertical; }
+textarea { min-height: 90px; resize: vertical; }
+
+/* :focus = quando o campo está selecionado. Damos um "brilho" na cor de destaque. */
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+/* ::placeholder = o texto de exemplo dentro do campo */
+::placeholder { color: #64748b; }
 
 button {
-  padding: 0.7rem;
+  margin-top: 1rem;
+  padding: 0.8rem;
   border: none;
-  border-radius: 8px;
-  background: var(--accent);
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
   color: #0b1220;
+  font: inherit;
   font-weight: 600;
-  font-size: 1rem;
   cursor: pointer;
+  transition: transform 0.1s, opacity 0.15s;
 }
 
-button:hover { opacity: 0.9; }
+button:hover { opacity: 0.92; }
+button:active { transform: translateY(1px); }  /* efeito de "apertar" */
 
-#lista-recados { display: flex; flex-direction: column; gap: 0.75rem; }
+/* ---------- Lista de recados ---------- */
+.titulo-secao {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.9rem;
+  color: var(--text);
+}
+
+#lista-recados { display: flex; flex-direction: column; gap: 0.8rem; }
 
 .recado {
   background: var(--card);
-  padding: 0.9rem 1rem;
-  border-radius: 10px;
-  border-left: 3px solid var(--accent);
+  border: 1px solid var(--card-borda);
+  border-left: 3px solid var(--accent);   /* faixinha colorida na esquerda */
+  padding: 0.9rem 1.1rem;
+  border-radius: 12px;
 }
 
-.recado .autor { font-weight: 600; color: var(--accent); }
+.recado .autor {
+  display: block;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+}
+
 .vazio { color: var(--muted); font-style: italic; }
 
+/* ---------- Rodapé ---------- */
 footer {
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
   color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ---------- Responsivo: ajustes para telas pequenas (celular) ---------- */
+@media (max-width: 480px) {
+  h1 { font-size: 1.6rem; }
+  .container { padding: 1.5rem 1rem; }
 }
