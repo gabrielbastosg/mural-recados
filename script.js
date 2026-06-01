@@ -5,6 +5,17 @@ const API_URL = "https://96j3wu0q2m.execute-api.us-east-1.amazonaws.com/default/
 
 const form = document.getElementById("form-recado");
 const lista = document.getElementById("lista-recados");
+const mensagem = document.getElementById("mensagem");
+const contador = document.getElementById("contador");
+
+// Contador de caracteres ao vivo: roda toda vez que o usuário digita algo.
+// "input" é o evento que dispara a cada tecla/colagem na caixa de texto.
+mensagem.addEventListener("input", () => {
+  const total = mensagem.value.length;
+  contador.textContent = total + "/200";
+  // Se passar de 180, fica amarelo (avisa que está quase no limite).
+  contador.classList.toggle("quase-cheio", total >= 180);
+});
 
 // Ao abrir a página, chamamos a API e mostramos a resposta.
 // Isso prova que o caminho site -> API Gateway -> Lambda -> resposta funciona.

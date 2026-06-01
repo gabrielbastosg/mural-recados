@@ -139,6 +139,16 @@ button:active { transform: translateY(1px); }  /* efeito de "apertar" */
 
 .vazio { color: var(--muted); font-style: italic; }
 
+/* Contador de caracteres: alinhado à direita, pequeno e discreto */
+.contador {
+  align-self: flex-end;   /* joga pra direita dentro do formulário (flex) */
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Cor de alerta quando estiver perto do limite (classe adicionada pelo JS) */
+.contador.quase-cheio { color: #fbbf24; }
+
 /* ---------- Rodapé ---------- */
 footer {
   text-align: center;
