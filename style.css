@@ -109,7 +109,10 @@ button {
   transition: transform 0.1s, opacity 0.15s;
 }
 
-button:hover { opacity: 0.92; }
+button:hover {
+  opacity: 0.95;
+  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.35);  /* brilho azul ao passar o mouse */
+}
 button:active { transform: translateY(1px); }  /* efeito de "apertar" */
 
 /* ---------- Lista de recados ---------- */
@@ -130,6 +133,15 @@ button:active { transform: translateY(1px); }  /* efeito de "apertar" */
   border-radius: 12px;
   /* Efeito suave de aparição (animação definida lá embaixo) */
   animation: aparecer 0.3s ease;
+  /* transition deixa as mudanças do :hover acontecerem suavemente */
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+/* Quando o mouse passa por cima: o cartão "levanta" um pouco e ganha brilho */
+.recado:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 /* Linha de cima do recado: nome à esquerda, data à direita */
@@ -179,6 +191,33 @@ footer {
   color: var(--muted);
   font-size: 0.85rem;
 }
+
+/* ---------- Detalhes finos de polish ---------- */
+
+/* Brilho suave embaixo do título, pra dar um charme no topo */
+.cabecalho { position: relative; }
+.cabecalho::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 3px;
+  margin: 0.8rem auto 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  opacity: 0.7;
+}
+
+/* Quando você está digitando no formulário, ele ganha uma borda de destaque */
+.cartao:focus-within { border-color: var(--accent); }
+
+/* Cor da seleção de texto (quando você arrasta o mouse pra selecionar) */
+::selection { background: rgba(56, 189, 248, 0.3); }
+
+/* Barra de rolagem mais discreta e combinando com o tema (Chrome/Edge) */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-1); }
+::-webkit-scrollbar-thumb { background: var(--card-borda); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
 /* ---------- Responsivo: ajustes para telas pequenas (celular) ---------- */
 @media (max-width: 480px) {
