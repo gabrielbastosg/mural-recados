@@ -1,44 +1,84 @@
-// Fase 2: o site agora chama uma API DE VERDADE na AWS. 🎉
-// (O POST para salvar recados chega na Fase 3, com o DynamoDB.)
+// Fase 3: o Mural salva e lista recados de verdade (DynamoDB via API). 🎉
 
 const API_URL = "https://96j3wu0q2m.execute-api.us-east-1.amazonaws.com/default/hello-mural";
 
 const form = document.getElementById("form-recado");
 const lista = document.getElementById("lista-recados");
+const nome = document.getElementById("nome");
 const mensagem = document.getElementById("mensagem");
 const contador = document.getElementById("contador");
 
-// Contador de caracteres ao vivo: roda toda vez que o usuário digita algo.
-// "input" é o evento que dispara a cada tecla/colagem na caixa de texto.
+// ----- Contador de caracteres ao vivo -----
 mensagem.addEventListener("input", () => {
   const total = mensagem.value.length;
   contador.textContent = total + "/200";
-  // Se passar de 180, fica amarelo (avisa que está quase no limite).
   contador.classList.toggle("quase-cheio", total >= 180);
 });
 
-// Ao abrir a página, chamamos a API e mostramos a resposta.
-// Isso prova que o caminho site -> API Gateway -> Lambda -> resposta funciona.
-async function testarApi() {
+// ----- Segurança: escapa HTML do texto do usuário -----
+// Sem isso, alguém poderia escrever <script> num recado e rodar código.
+// Aqui transformamos qualquer HTML em texto puro (boa prática essencial).
+function escapeHtml(texto) {
+  const div = document.createElement("div");
+  div.textContent = texto;
+  return div.innerHTML;
+}
+
+// ----- Listar recados (GET) -----
+async function carregarRecados() {
   try {
-    const resposta = await fetch(API_URL);
-    if (!resposta.ok) throw new Error("HTTP " + resposta.status);
-    const dados = await resposta.json();
-    lista.innerHTML =
-      '<div class="recado"><span class="autor">API AWS</span><p>' +
-      dados.mensagem +
-      "</p></div>";
+    const r = await fetch(API_URL);
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const recados = await r.json();
+
+    if (recados.length === 0) {
+      lista.innerHTML = '<p class="vazio">Ainda não há recados. Seja o primeiro! 🙂</p>';
+      return;
+    }
+
+    lista.innerHTML = recados
+      .map(
+        (rec) =>
+          '<div class="recado"><span class="autor">' +
+          escapeHtml(rec.nome) +
+          "</span><p>" +
+          escapeHtml(rec.mensagem) +
+          "</p></div>"
+      )
+      .join("");
   } catch (erro) {
-    lista.innerHTML =
-      '<p class="vazio">⚠️ Não consegui falar com a API. Abra o console (F12) para ver o erro.</p>';
-    console.error("Erro ao chamar a API:", erro);
+    lista.innerHTML = '<p class="vazio">⚠️ Erro ao carregar os recados. Veja o console (F12).</p>';
+    console.error("Erro no GET:", erro);
   }
 }
 
-// Por enquanto o formulário só avisa: salvar recados vem na Fase 3.
-form.addEventListener("submit", (evento) => {
+// ----- Enviar recado (POST) -----
+form.addEventListener("submit", async (evento) => {
   evento.preventDefault();
-  alert("Em breve! Salvar recados vem na Fase 3, com o banco de dados (DynamoDB). 🙂");
+
+  const botao = form.querySelector("button");
+  botao.disabled = true;
+  botao.textContent = "Enviando...";
+
+  try {
+    const r = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome: nome.value, mensagem: mensagem.value }),
+    });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+
+    form.reset();                 // limpa o formulário
+    contador.textContent = "0/200";
+    await carregarRecados();      // recarrega a lista (mostra o novo recado)
+  } catch (erro) {
+    alert("Não consegui enviar o recado. Tente de novo. 😕");
+    console.error("Erro no POST:", erro);
+  } finally {
+    botao.disabled = false;
+    botao.textContent = "Enviar recado";
+  }
 });
 
-testarApi();
+// Ao abrir a página, já carrega os recados existentes.
+carregarRecados();
