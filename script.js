@@ -4,6 +4,7 @@ const API_URL = "https://96j3wu0q2m.execute-api.us-east-1.amazonaws.com/default/
 
 const form = document.getElementById("form-recado");
 const lista = document.getElementById("lista-recados");
+const titulo = document.getElementById("titulo-recados");
 const nome = document.getElementById("nome");
 const mensagem = document.getElementById("mensagem");
 const contador = document.getElementById("contador");
@@ -24,12 +25,30 @@ function escapeHtml(texto) {
   return div.innerHTML;
 }
 
+// ----- Formata a data ISO (UTC) para algo legível em pt-BR -----
+// Ex.: "2026-06-02T17:07:33Z"  ->  "02/06/2026 14:07" (no horário local)
+function formatarData(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d)) return "";
+  return d.toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 // ----- Listar recados (GET) -----
 async function carregarRecados() {
   try {
     const r = await fetch(API_URL);
     if (!r.ok) throw new Error("HTTP " + r.status);
     const recados = await r.json();
+
+    // Atualiza o número de recados no título
+    titulo.textContent = "Recados (" + recados.length + ")";
 
     if (recados.length === 0) {
       lista.innerHTML = '<p class="vazio">Ainda não há recados. Seja o primeiro! 🙂</p>';
@@ -39,11 +58,13 @@ async function carregarRecados() {
     lista.innerHTML = recados
       .map(
         (rec) =>
-          '<div class="recado"><span class="autor">' +
-          escapeHtml(rec.nome) +
-          "</span><p>" +
-          escapeHtml(rec.mensagem) +
-          "</p></div>"
+          '<div class="recado">' +
+          '<div class="recado-topo">' +
+          '<span class="autor">' + escapeHtml(rec.nome) + "</span>" +
+          '<span class="data">' + formatarData(rec.criado_em) + "</span>" +
+          "</div>" +
+          "<p>" + escapeHtml(rec.mensagem) + "</p>" +
+          "</div>"
       )
       .join("");
   } catch (erro) {

@@ -128,13 +128,36 @@ button:active { transform: translateY(1px); }  /* efeito de "apertar" */
   border-left: 3px solid var(--accent);   /* faixinha colorida na esquerda */
   padding: 0.9rem 1.1rem;
   border-radius: 12px;
+  /* Efeito suave de aparição (animação definida lá embaixo) */
+  animation: aparecer 0.3s ease;
+}
+
+/* Linha de cima do recado: nome à esquerda, data à direita */
+.recado-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
 .recado .autor {
-  display: block;
   font-weight: 600;
   color: var(--accent);
-  margin-bottom: 0.2rem;
+}
+
+.recado .data {
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;   /* não quebra a data em duas linhas */
+}
+
+.recado p { word-break: break-word; }   /* mensagens longas não estouram o cartão */
+
+/* Animação: começa transparente e levemente pra baixo, e "sobe" aparecendo */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .vazio { color: var(--muted); font-style: italic; }
