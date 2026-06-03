@@ -61,7 +61,10 @@ async function carregarRecados() {
           '<div class="recado">' +
           '<div class="recado-topo">' +
           '<span class="autor">' + escapeHtml(rec.nome) + "</span>" +
+          '<span class="meta">' +
           '<span class="data">' + formatarData(rec.criado_em) + "</span>" +
+          '<button class="apagar" data-id="' + rec.id + '" title="Apagar recado">🗑️</button>' +
+          "</span>" +
           "</div>" +
           "<p>" + escapeHtml(rec.mensagem) + "</p>" +
           "</div>"
@@ -99,6 +102,29 @@ form.addEventListener("submit", async (evento) => {
     botao.disabled = false;
     botao.textContent = "Enviar recado";
   }
+});
+
+// ----- Apagar recado (DELETE) -----
+async function apagarRecado(id) {
+  if (!confirm("Apagar este recado?")) return; // pede confirmação
+  try {
+    const r = await fetch(API_URL + "?id=" + encodeURIComponent(id), {
+      method: "DELETE",
+    });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    await carregarRecados(); // recarrega a lista sem o recado apagado
+  } catch (erro) {
+    alert("Não consegui apagar o recado. Tente de novo. 😕");
+    console.error("Erro no DELETE:", erro);
+  }
+}
+
+// Delegação de evento: um único listener na lista cuida de TODOS os botões 🗑️.
+// (Como os recados são recriados a cada carregamento, é mais eficiente que
+//  colocar um listener em cada botão.)
+lista.addEventListener("click", (evento) => {
+  const botao = evento.target.closest(".apagar");
+  if (botao) apagarRecado(botao.dataset.id);
 });
 
 // Ao abrir a página, já carrega os recados existentes.
